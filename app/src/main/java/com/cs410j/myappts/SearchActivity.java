@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -97,7 +98,9 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
                     toast(e.getMessage());
                 }
                 if (appointments != null && appointments.size() != 0) {
-                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, appointments.toArray()));
+                    PrettyPrinter prettyPrinter = new PrettyPrinter();
+                    ArrayList apptArr = prettyPrinter.buildOutput(appointments);
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, apptArr.toArray()));
                 } else {
                     String[] arr = new String[1];
                     arr[0] = "No matching appointments found. Nothing to display.";

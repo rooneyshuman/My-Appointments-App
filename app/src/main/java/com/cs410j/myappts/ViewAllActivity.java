@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import edu.pdx.cs410J.ParserException;
@@ -42,9 +43,11 @@ public class ViewAllActivity extends AppCompatActivity {
         }
 
         else {
-            Collection<Appointment> appointments = appointmentBook.getAppointments();
             ListView listView = findViewById(R.id.appts_list_view);
-            listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, appointments.toArray()));
+            PrettyPrinter prettyPrinter = new PrettyPrinter();
+            Collection appointments = appointmentBook.getAppointments();
+            ArrayList apptArr = prettyPrinter.buildOutput(appointments);
+            listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, apptArr.toArray()));
         }
 
     }
