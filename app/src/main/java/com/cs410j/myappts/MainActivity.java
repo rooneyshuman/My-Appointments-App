@@ -3,18 +3,10 @@ package com.cs410j.myappts;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,24 +33,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Get owner name
-        else {
-            TextView myApptsText = findViewById(R.id.myApptsText);
-            try {
-                File file = new File(getApplicationContext().getFilesDir(), "myAppts.txt");
-                FileInputStream fileInputStream = new FileInputStream (file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        owner = prefs.getString("ownerPref", null);
 
-                owner = bufferedReader.readLine();
-                fileInputStream.close();
-                bufferedReader.close();
-            }
-            catch(IOException ex) {
-                Log.d("Error", Objects.requireNonNull(ex.getMessage()));
-            }
-
-            myApptsText.setText(String.format("%s's Appointments", owner));
-        }
+        TextView ownerTextMain = findViewById(R.id.ownerTextMain);
+        ownerTextMain.setText(String.format("%s", owner));
     }
 
     public void helpMe(View view) {
@@ -78,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void viewAll(View view) {
         Intent intent = new Intent(this, ViewAllActivity.class);
+        startActivity(intent);
+    }
+
+    public void changeOwner(View view) {
+        Intent intent = new Intent(this, ChangeOwnerActivity.class);
         startActivity(intent);
     }
 }

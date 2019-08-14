@@ -3,6 +3,7 @@ package com.cs410j.myappts;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,6 @@ import java.util.Collection;
 import edu.pdx.cs410J.ParserException;
 
 public class SearchActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private String description;
     private int year;
     private int month;
     private int day;
@@ -31,7 +31,6 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
     String endTime;
 
     public SearchActivity() {
-        description = "";
         endTime = "";
         beginTime = "";
     }
@@ -65,36 +64,43 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
     }
 
     public void searchAppt(View view) {
-        File file = new File(getApplicationContext().getFilesDir(), "myAppts.txt");
-        TextParser textParser = new TextParser(file);
-        AppointmentBook appointmentBook = null;
-        try {
-            appointmentBook = (AppointmentBook) textParser.parse();
-        } catch (ParserException e) {
-            toast(e.getMessage());
-        }
+        if (!beginTime.equals("") || !endTime.equals("")) {
+            SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+            String owner = prefs.getString("ownerPref", null);
+            String filename = owner + ".txt";
 
-        if (appointmentBook.getAppointments().size() == 0) {
-            toast("No appointments have been added. Nothing to search.");
-        }
-
-        else {
-            Collection appointments = null;
-            ListView listView = findViewById(R.id.results_list_view);
+            File file = new File(getApplicationContext().getFilesDir(), filename);
+            TextParser textParser = new TextParser(file);
+            AppointmentBook appointmentBook = null;
             try {
-                appointments = appointmentBook.search(beginTime, endTime).getAppointments();
-            } catch (ParseException e) {
+                appointmentBook = (AppointmentBook) textParser.parse();
+            } catch (ParserException e) {
                 toast(e.getMessage());
             }
-            if (appointments != null && appointments.size() != 0) {
-                listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, appointments.toArray()));
-            }
-            else {
-                String [] arr = new String[1];
-                arr[0] = "No matching appointments found. Nothing to display.";
-                listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arr));
+
+            if (appointmentBook.getAppointments().size() == 0) {
+                toast("No appointments have been added. Nothing to search.");
+            } else {
+                Collection appointments = null;
+                ListView listView = findViewById(R.id.results_list_view);
+                try {
+                    appointments = appointmentBook.search(beginTime, endTime).getAppointments();
+                } catch (ParseException e) {
+                    toast(e.getMessage());
+                }
+                if (appointments != null && appointments.size() != 0) {
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, appointments.toArray()));
+                } else {
+                    String[] arr = new String[1];
+                    arr[0] = "No matching appointments found. Nothing to display.";
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arr));
+                }
             }
         }
+
+        else
+            toast("Please complete filling out the appointment information");
+
     }
 
     public void setDate() {

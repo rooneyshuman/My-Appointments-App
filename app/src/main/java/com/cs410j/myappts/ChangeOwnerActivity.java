@@ -15,52 +15,57 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-public class LaunchActivity extends AppCompatActivity {
+public class ChangeOwnerActivity extends AppCompatActivity {
     private SharedPreferences prefs;
-    private String owner = "";
+    String ownerText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch);
+        setContentView(R.layout.activity_change_owner);
         prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
     }
 
+
     public void submit(View view) {
-        if (createApptBook()) {
+        if (processChangeOwner()) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }
 
-    private boolean createApptBook() {
-        EditText ownerText = findViewById(R.id.ownerText);
-        owner = ownerText.getText().toString();
-        if (!owner.equals("")) {
-            String filename = owner + ".txt";
-            prefs.edit().putString("ownerPref", owner).apply();
+    private boolean processChangeOwner() {
+        EditText owner = findViewById(R.id.ownerText);
+        ownerText = owner.getText().toString();
 
+        if (!ownerText.equals("")) {
+            String filename = ownerText + ".txt";
+            prefs.edit().putString("ownerPref", ownerText).apply();
             try {
                 File file = new File(getApplicationContext().getFilesDir(), filename);
                 if (!file.exists()) {
                     file.createNewFile();
                     FileOutputStream fileOutputStream = new FileOutputStream(file, true);
-                    fileOutputStream.write((owner + System.getProperty("line.separator")).getBytes());
+                    fileOutputStream.write((ownerText + System.getProperty("line.separator")).getBytes());
                 }
-
 
             } catch (IOException ex) {
                 Log.d("Error", Objects.requireNonNull(ex.getMessage()));
             }
             return true;
         }
-
         else {
             toast("Cannot submit without entering a name first.");
         }
 
-        owner = "";
+        ownerText = "";
         return false;
+
+    }
+
+    public void goBack(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void toast(String message) {

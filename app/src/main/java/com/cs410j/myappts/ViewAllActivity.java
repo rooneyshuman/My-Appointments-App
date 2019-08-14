@@ -1,6 +1,7 @@
 package com.cs410j.myappts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,7 +25,10 @@ public class ViewAllActivity extends AppCompatActivity {
     }
 
     private void display() {
-        File file = new File(getApplicationContext().getFilesDir(), "myAppts.txt");
+        SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        String owner = prefs.getString("ownerPref", null);
+        String filename = owner + ".txt";
+        File file = new File(getApplicationContext().getFilesDir(), filename);
         TextParser textParser = new TextParser(file);
         AppointmentBook appointmentBook = null;
         try {

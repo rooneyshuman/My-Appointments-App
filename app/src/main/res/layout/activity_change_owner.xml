@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/enterOwnerText"
-        android:layout_width="277dp"
-        android:layout_height="90dp"
+        android:layout_width="283dp"
+        android:layout_height="67dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="108dp"
-        android:text="To begin using the app, please enter the name of the Appointment Book's owner:"
+        android:text="Please enter the name of the Appointment Book's owner:"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/submitBtnLaunch"
@@ -21,13 +21,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/welcomeText"
+        android:id="@+id/changeOwnerText"
         android:layout_width="411dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="Welcome to 'My Appointments'"
+        android:text="Change Owner"
         android:textAlignment="center"
         android:textColor="#008080"
         android:textSize="24sp"
@@ -41,8 +41,7 @@
         android:id="@+id/submitBtnLaunch"
         android:layout_width="101dp"
         android:layout_height="53dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="80dp"
         android:layout_marginBottom="224dp"
         android:backgroundTint="#008080"
         android:onClick="submit"
@@ -50,8 +49,27 @@
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="101dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="224dp"
+        android:backgroundTint="#008080"
+        android:onClick="goBack"
+        android:text="Back"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/submitBtnLaunch"
+        app:layout_constraintHorizontal_bias="0.646"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownerText"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/ownerText"
