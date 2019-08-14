@@ -75,5 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewAll(View view) {
+        Intent intent = new Intent(this, ViewAllActivity.class);
+        startActivity(intent);
     }
 }
