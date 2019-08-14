@@ -34,7 +34,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
             this.beginTime = formatter.parse(beginTime);
             this.endTime = formatter.parse(endTime);
             getDuration();
-        } catch (ParseException e) {
+        } catch (ParseException | IllegalArgumentException e) {
             throw new NumberFormatException("Invalid date time format.");
         }
         this.description = description;

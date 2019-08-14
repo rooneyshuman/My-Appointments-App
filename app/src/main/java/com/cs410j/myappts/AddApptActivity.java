@@ -128,8 +128,16 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         if (description.equals("") || beginTime.equals("") || endTime.equals("")) {
             toast("Please complete filling out the appointment information");
         }
+
         else {
-            Appointment appt = new Appointment(description, beginTime, endTime);
+            Appointment appt = null;
+            try {
+                appt = new Appointment(description, beginTime, endTime);
+            } catch (NumberFormatException e) {
+                toast("Begin date cannot occur after end date. Re-enter the appointment dates.");
+                return;
+            }
+
             AppointmentBook appointmentBook = null;
             SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
             String owner = prefs.getString("ownerPref", null);
@@ -157,7 +165,6 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
                 toast("Appointment added: " + appt.toString());
             }
         }
-
     }
 
     private void toast(String message) {

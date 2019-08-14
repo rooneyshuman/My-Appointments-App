@@ -65,6 +65,14 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
 
     public void searchAppt(View view) {
         if (!beginTime.equals("") || !endTime.equals("")) {
+
+            try {
+                new Appointment("desc", beginTime, endTime);
+            } catch (NumberFormatException e) {
+                toast("Begin date cannot occur after end date. Re-enter the appointment dates.");
+                return;
+            }
+
             SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
             String owner = prefs.getString("ownerPref", null);
             String filename = owner + ".txt";
@@ -99,7 +107,7 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
         }
 
         else
-            toast("Please complete filling out the appointment information");
+            toast("Please complete filling out the search criteria.");
 
     }
 

@@ -75,7 +75,7 @@
         android:id="@+id/setBeginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="36dp"
         android:layout_marginBottom="8dp"
         android:text="Set Begin Time"
@@ -95,16 +95,16 @@
         android:text="Set End Time"
         app:layout_constraintBottom_toTopOf="@+id/backBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.256"
+        app:layout_constraintHorizontal_bias="0.431"
         app:layout_constraintStart_toEndOf="@+id/setBeginBtn"
         app:layout_constraintTop_toBottomOf="@+id/descText"
         app:layout_constraintVertical_bias="0.168" />
 
     <TextView
         android:id="@+id/beginTimeText"
-        android:layout_width="128dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="72dp"
+        android:layout_width="150dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/setBeginBtn"
@@ -114,15 +114,15 @@
 
     <TextView
         android:id="@+id/endTimeText"
-        android:layout_width="128dp"
-        android:layout_height="26dp"
+        android:layout_width="150dp"
+        android:layout_height="27dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/setEndBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.253"
+        app:layout_constraintHorizontal_bias="0.309"
         app:layout_constraintStart_toEndOf="@+id/beginTimeText"
         app:layout_constraintTop_toBottomOf="@+id/descText"
         app:layout_constraintVertical_bias="1.0" />

@@ -36,6 +36,7 @@ public class HelpActivity extends AppCompatActivity {
                 "\n\t\u2022 Click 'ADD' to create a new appointment" +
                 "\n\t\u2022 Click 'SEARCH' to search for an appointment" +
                 "\n\t\u2022 Click 'VIEW ALL' to view all of your\n\t\tappointments" +
+                "\n\t\u2022 Click 'CHANGE OWNER' to change the \n\t\tappointment book used" +
                 "\n\t\u2022 Click 'HELP' to return to this page";
     }
 }
