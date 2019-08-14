@@ -15,8 +15,8 @@ public class PrettyPrinter {
 
     /**
      * Utility method to build a string containing the appointment book info to be pretty printed
-     * @param appointments: The appointment to be pretty printer
-     * @return Returns the built String containing the info in a pretty printed format
+     * @param appointments: The collection of appointments to be pretty printer
+     * @return Returns the ArrayList of Strings containing each appointment in a pretty printed format
      */
     public ArrayList<String> buildOutput(Collection<Appointment> appointments) {
         ArrayList<String> arr = new ArrayList<>();

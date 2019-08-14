@@ -23,6 +23,11 @@ import java.util.Collection;
 
 import edu.pdx.cs410J.ParserException;
 
+/**
+ * This class handles activity of searching for appointments in a date range.
+ *
+ * @author Belén Bustamante
+ */
 public class SearchActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private int year;
     private int month;
@@ -31,11 +36,19 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
     String beginTime;
     String endTime;
 
+    /**
+     * Class constructor. Initializes data members.
+     */
     public SearchActivity() {
         endTime = "";
         beginTime = "";
     }
 
+    /**
+     * Executed when the activity is launched. Executes setDate() when setBeginBtn or setEndBtn
+     * are clicked.
+     * @param savedInstanceState: the application's current instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +71,20 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
         });
     }
 
-
+    /**
+     * Returns the view back to the main activity page.
+     * @param view: current application view
+     */
     public void goBack(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Retrieves and displays the results of the search. If no appointments were found, an error is
+     * displayed to the user.
+     * @param view: Current application view.
+     */
     public void searchAppt(View view) {
         if (!beginTime.equals("") || !endTime.equals("")) {
 
@@ -114,6 +135,9 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
 
     }
 
+    /**
+     * Initializes the DatePicker dialog box to allow the user to set the dates and times.
+     */
     public void setDate() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -125,6 +149,13 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
         datePickerDialog.show();
     }
 
+    /**
+     * Called by setDate() to retrieve the date information selected. Initializes TimePicker.
+     * @param datePicker: current datePicker object
+     * @param i: year selected
+     * @param i1: month selected
+     * @param i2: day selected
+     */
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         year = i;
@@ -140,6 +171,13 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
         timePickerDialog.show();
     }
 
+    /**
+     * Called by onDateSet() to retrieve the time information selected. Saves the entered date and
+     * time to either beginDateTime or endDateTime.
+     * @param timePicker: timePicker object
+     * @param i: hour selected
+     * @param i1: minute selected
+     */
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         StringBuilder dateBuilder = new StringBuilder();
@@ -170,6 +208,10 @@ public class SearchActivity extends AppCompatActivity  implements DatePickerDial
         }
     }
 
+    /**
+     * Utility method used to display toast messages to the user
+     * @param message: Message to be displayed
+     */
     private void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

@@ -16,8 +16,17 @@ import java.util.Collection;
 
 import edu.pdx.cs410J.ParserException;
 
+/**
+ * This class handles the activity of displaying all of the current owner's appointments
+ *
+ * @author Belén Bustamante
+ */
 public class ViewAllActivity extends AppCompatActivity {
 
+    /**
+     * Executed when the activity is launched. Executes display() and sets the proper content view.
+     * @param savedInstanceState: the application's current instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +34,10 @@ public class ViewAllActivity extends AppCompatActivity {
         display();
     }
 
+    /**
+     * Displays the current owner's appointments. If the appointment book is empty, an error message
+     * is displayed
+     */
     private void display() {
         SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
         String owner = prefs.getString("ownerPref", null);
@@ -49,14 +62,21 @@ public class ViewAllActivity extends AppCompatActivity {
             ArrayList apptArr = prettyPrinter.buildOutput(appointments);
             listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, apptArr.toArray()));
         }
-
     }
 
+    /**
+     * Returns the view back to the main activity page.
+     * @param view: current application view
+     */
     public void goBack(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Utility method used to display toast messages to the user
+     * @param message: Message to be displayed
+     */
     private void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }

@@ -7,9 +7,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class handles the activity of showing the user proper usage information
+ *
+ * @author Belén Bustamante
+ */
 public class HelpActivity extends AppCompatActivity {
 
-
+    /**
+     * Executed when the activity is launched. Sets the text of the helpText TextView to the
+     * String returned by readMe()
+     * @param savedInstanceState: the application's current instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,13 +27,19 @@ public class HelpActivity extends AppCompatActivity {
         helpText.setText(readMe());
     }
 
-
-
+    /**
+     * Returns the view back to the main activity page.
+     * @param view: current application view
+     */
     public void goBack(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Creates a string of proper application usage. Explains the functionality of the buttons in the app.
+     * @return: String of proper usage
+     */
     private String readMe() {
         return
         "This application will allow you to save appointment information such as" +

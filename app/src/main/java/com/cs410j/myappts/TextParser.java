@@ -14,7 +14,7 @@ import edu.pdx.cs410J.ParserException;
 
 /**
  * This class implements the parse() method in the AppointmentBookParser interface.
- * Has a private data member, filePath, which is set through the class constructor, to
+ * Has a private data member, file, which is set through the class constructor, to
  * determine the file that needs to be parsed into an appointment book.
  *
  * @author Belén Bustamante
@@ -23,8 +23,8 @@ public class TextParser implements AppointmentBookParser {
     private File file;
 
     /**
-     * Constructor for TextParser class. Initializes the file path name
-     * @param file: String holding the name of the file
+     * Constructor for TextParser class. Initializes the file object
+     * @param file: File object
      */
     TextParser(File file) {
         this.file = file;

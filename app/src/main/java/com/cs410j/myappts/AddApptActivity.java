@@ -20,6 +20,11 @@ import java.util.Calendar;
 
 import edu.pdx.cs410J.ParserException;
 
+/**
+ * This class handles the activity of adding a new appointment
+ *
+ * @author Belén Bustamante
+ */
 public class AddApptActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private String description;
     private int year;
@@ -29,12 +34,20 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
     String beginTime;
     String endTime;
 
+    /**
+     * Class constructor. Initialized private date members.
+     */
     public AddApptActivity() {
         description = "";
         endTime = "";
         beginTime = "";
     }
 
+    /**
+     * Executed when the activity is launched. Executes setDate() when setBeginBtn or setEndBtn
+     * are clicked.
+     * @param savedInstanceState: the application's current instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +70,18 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         });
     }
 
+    /**
+     * Returns the view back to the main activity page.
+     * @param view: current application view
+     */
     public void goBack(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-
+    /**
+     * Initializes the DatePicker dialog box to allow the user to set the dates and times.
+     */
     public void setDate() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -74,6 +93,13 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         datePickerDialog.show();
     }
 
+    /**
+     * Called by setDate() to retrieve the date information selected. Initializes TimePicker.
+     * @param datePicker: current datePicker object
+     * @param i: year selected
+     * @param i1: month selected
+     * @param i2: day selected
+     */
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         year = i;
@@ -89,6 +115,13 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         timePickerDialog.show();
     }
 
+    /**
+     * Called by onDateSet() to retrieve the time information selected. Saves the entered date and
+     * time to either beginDateTime or endDateTime.
+     * @param timePicker: timePicker object
+     * @param i: hour selected
+     * @param i1: minute selected
+     */
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         StringBuilder dateBuilder = new StringBuilder();
@@ -121,6 +154,11 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         }
     }
 
+    /**
+     * Allows the user to add the appointment to their appointment book. Verifies that all necessary
+     * fields have been filed.
+     * @param view: current application view.
+     */
     public void submitAppt(View view) {
         EditText descText = findViewById(R.id.descText);
         description = descText.getText().toString();
@@ -167,6 +205,10 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         }
     }
 
+    /**
+     * Utility method used to display toast messages to the user
+     * @param message: Message to be displayed
+     */
     private void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
