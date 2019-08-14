@@ -34,7 +34,7 @@ public class ViewAllActivity extends AppCompatActivity {
         }
 
         if (appointmentBook.getAppointments().size() == 0) {
-
+            toast("No appointments have been added yet.");
         }
 
         else {
