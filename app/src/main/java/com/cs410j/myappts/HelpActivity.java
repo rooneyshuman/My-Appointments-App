@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class HelpActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +17,8 @@ public class HelpActivity extends AppCompatActivity {
         TextView helpText = findViewById(R.id.helpText);
         helpText.setText(readMe());
     }
+
+
 
     public void goBack(View view) {
         Intent intent = new Intent(this, MainActivity.class);

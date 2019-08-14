@@ -1,44 +1,64 @@
 package com.cs410j.myappts;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String owner;
+    SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
-        if (!canLoad()) {
-            // Display error - no appointment book found on device. Enter your name to create a new appointment book.
-        }
 
     }
 
-    private boolean canLoad() {
-        File file = new File("myAppts.txt");
-        // File does not exist, create new file
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            }
-            catch (IOException e) {
-                Log.v("Error" ,"Unable to create new file");
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (prefs.getBoolean("firstRun", true)) {
+            // Set owner name
+            prefs.edit().putBoolean("firstRun", false).apply();
+            Intent intent = new Intent(this, LaunchActivity.class);
+            startActivity(intent);
         }
 
-        // Check if file is empty
-        if (file.length() != 0)
-            return true;
+        // Get owner name
+        else {
+            TextView myApptsText = findViewById(R.id.myApptsText);
+            try {
+                File file = new File(getApplicationContext().getFilesDir(), "myAppts.txt");
+                FileInputStream fileInputStream = new FileInputStream (file);
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-        return false;
+                owner = bufferedReader.readLine();
+                fileInputStream.close();
+                bufferedReader.close();
+            }
+            catch(IOException ex) {
+                Log.d("Error", Objects.requireNonNull(ex.getMessage()));
+            }
+
+            myApptsText.setText(String.format("%s's Appointments", owner));
+        }
     }
 
     public void helpMe(View view) {
