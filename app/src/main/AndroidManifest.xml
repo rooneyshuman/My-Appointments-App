@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".LaunchActivity">
         </activity>
+        <activity android:name=".AddApptActivity">
+        </activity>
     </application>
 
 </manifest>

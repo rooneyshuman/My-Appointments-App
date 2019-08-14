@@ -1,13 +1,11 @@
 package com.cs410j.myappts;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
@@ -22,14 +20,14 @@ import edu.pdx.cs410J.ParserException;
  * @author Belén Bustamante
  */
 public class TextParser implements AppointmentBookParser {
-    private String filePath;
+    private File file;
 
     /**
      * Constructor for TextParser class. Initializes the file path name
-     * @param fileName: String holding the name of the file
+     * @param file: String holding the name of the file
      */
-    TextParser(String fileName) {
-        this.filePath = System.getProperty("user.dir") + "/" + fileName;
+    TextParser(File file) {
+        this.file = file;
     }
 
     /**
@@ -39,53 +37,43 @@ public class TextParser implements AppointmentBookParser {
      */
     @Override
     public AbstractAppointmentBook parse() throws ParserException {
-        Scanner scanner;
-        File file;
-        FileReader fr;
-        String contents = "";
-
-        try {
-            file = new File(filePath);
-            scanner = new Scanner(file);
-        }
-        catch (FileNotFoundException e) {
-            throw new ParserException("File not found");
-        }
-
-        scanner.useDelimiter("[|\\n]");
-
-        try {
-            contents = new String(Files.readAllBytes(Paths.get(filePath)));
-
-        } catch (IOException e) {
-            throw new ParserException("Error parsing contents");
-        }
-
-        if (!contents.contains("|"))
-            throw new ParserException("Improperly formatted file");
-
-
         String owner, description, beginTime, endTime;
 
-        // File exists and is not empty, begin parsing contents
-        owner = scanner.next();
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new ParserException("Error parsing file contents");
+        }
+        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        try {
+            owner = bufferedReader.readLine();
+        } catch (IOException e) {
+            throw new ParserException("Error parsing file contents");
+        }
+
         AbstractAppointmentBook abstractAppointmentBook = new AppointmentBook(owner);
         AppointmentBook appointmentBook = (AppointmentBook) abstractAppointmentBook;
 
-        while (scanner.hasNext()) {
-            try {
-                description = scanner.next();
-                beginTime = scanner.next();
-                endTime = scanner.next();
+        String line;
+
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                description = line;
+                beginTime = bufferedReader.readLine();
+                endTime = bufferedReader.readLine();
 
                 AbstractAppointment appointment = new Appointment(description, beginTime, endTime);
-
                 appointmentBook.addAppointment(appointment);
-            } catch (NoSuchElementException | NumberFormatException e) {
-                throw new ParserException("Improperly formatted file. " + e.getMessage() + "Acceptable format is: mm/dd/yyyy hh:mm AM");
             }
+            fileInputStream.close();
+            bufferedReader.close();
+
+        } catch (IOException e) {
+            throw new ParserException("Error parsing file contents");
         }
-        scanner.close();
 
         return appointmentBook;
     }
