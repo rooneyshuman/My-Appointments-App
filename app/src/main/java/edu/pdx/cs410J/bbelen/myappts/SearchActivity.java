@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -15,18 +16,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 
 import edu.pdx.cs410J.ParserException;
 
 /**
- * This class handles the activity of adding a new appointment
+ * This class handles activity of searching for appointments in a date range.
  *
  * @author Belén Bustamante
  */
-public class AddApptActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private String description;
+public class SearchActivity extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private int year;
     private int month;
     private int day;
@@ -35,10 +37,9 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
     String endTime;
 
     /**
-     * Class constructor. Initialized private date members.
+     * Class constructor. Initializes data members.
      */
-    public AddApptActivity() {
-        description = "";
+    public SearchActivity() {
         endTime = "";
         beginTime = "";
     }
@@ -51,7 +52,7 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_appt);
+        setContentView(R.layout.activity_search);
 
         findViewById(R.id.setBeginBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +81,61 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
     }
 
     /**
+     * Retrieves and displays the results of the search. If no appointments were found, an error is
+     * displayed to the user.
+     * @param view: Current application view.
+     */
+    public void searchAppt(View view) {
+        if (!beginTime.equals("") || !endTime.equals("")) {
+
+            try {
+                new Appointment("desc", beginTime, endTime);
+            } catch (NumberFormatException e) {
+                toast("Begin date cannot occur after end date. Re-enter the appointment dates.");
+                return;
+            }
+
+            SharedPreferences prefs = getSharedPreferences("edu.pdx.cs410J.bbelen.myappts", MODE_PRIVATE);
+            String owner = prefs.getString("ownerPref", null);
+            String filename = owner + ".txt";
+
+            File file = new File(getApplicationContext().getFilesDir(), filename);
+            TextParser textParser = new TextParser(file);
+            AppointmentBook appointmentBook = null;
+            try {
+                appointmentBook = (AppointmentBook) textParser.parse();
+            } catch (ParserException e) {
+                toast(e.getMessage());
+            }
+
+            if (appointmentBook.getAppointments().size() == 0) {
+                toast("No appointments have been added. Nothing to search.");
+            } else {
+                Collection appointments = null;
+                ListView listView = findViewById(R.id.results_list_view);
+                try {
+                    appointments = appointmentBook.search(beginTime, endTime).getAppointments();
+                } catch (ParseException e) {
+                    toast(e.getMessage());
+                }
+                if (appointments != null && appointments.size() != 0) {
+                    PrettyPrinter prettyPrinter = new PrettyPrinter();
+                    ArrayList apptArr = prettyPrinter.buildOutput(appointments);
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, apptArr.toArray()));
+                } else {
+                    String[] arr = new String[1];
+                    arr[0] = "No matching appointments found. Nothing to display.";
+                    listView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, arr));
+                }
+            }
+        }
+
+        else
+            toast("Please complete filling out the search criteria.");
+
+    }
+
+    /**
      * Initializes the DatePicker dialog box to allow the user to set the dates and times.
      */
     public void setDate() {
@@ -88,8 +144,8 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(AddApptActivity.this,
-                AddApptActivity.this, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(SearchActivity.this,
+                SearchActivity.this, year, month, day);
         datePickerDialog.show();
     }
 
@@ -110,8 +166,8 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(AddApptActivity.this,
-                AddApptActivity.this, hour, minute, false);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(SearchActivity.this,
+                SearchActivity.this, hour, minute, false);
         timePickerDialog.show();
     }
 
@@ -132,8 +188,7 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
         if (hour > 12) {
             am_pm = "pm";
             hour = hour - 12;
-        }
-        else
+        } else
             am_pm = "am";
 
         if (hour == 0)
@@ -146,62 +201,10 @@ public class AddApptActivity extends AppCompatActivity implements DatePickerDial
             beginTime = dateBuilder.toString();
             TextView beginTimeText = findViewById(R.id.beginTimeText);
             beginTimeText.setText(beginTime);
-        }
-        else {
+        } else {
             endTime = dateBuilder.toString();
             TextView endTimeText = findViewById(R.id.endTimeText);
             endTimeText.setText(endTime);
-        }
-    }
-
-    /**
-     * Allows the user to add the appointment to their appointment book. Verifies that all necessary
-     * fields have been filed.
-     * @param view: current application view.
-     */
-    public void submitAppt(View view) {
-        EditText descText = findViewById(R.id.descText);
-        description = descText.getText().toString();
-
-        if (description.equals("") || beginTime.equals("") || endTime.equals("")) {
-            toast("Please complete filling out the appointment information");
-        }
-
-        else {
-            Appointment appt = null;
-            try {
-                appt = new Appointment(description, beginTime, endTime);
-            } catch (NumberFormatException e) {
-                toast("Begin date cannot occur after end date. Re-enter the appointment dates.");
-                return;
-            }
-
-            AppointmentBook appointmentBook = null;
-            SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
-            String owner = prefs.getString("ownerPref", null);
-            String filename = owner + ".txt";
-
-            File file = new File(getApplicationContext().getFilesDir(), filename);
-            TextParser textParser = new TextParser(file);
-
-            try {
-                appointmentBook = (AppointmentBook) textParser.parse();
-            } catch (ParserException e) {
-                toast(e.getMessage());
-            }
-            if (appointmentBook != null) {
-                appointmentBook.addAppointment(appt);
-                TextDumper textDumper = new TextDumper(file);
-                try {
-                    textDumper.dump(appointmentBook);
-                } catch (IOException e) {
-                    toast(e.getMessage());
-                }
-                description = "";
-                beginTime = "";
-                endTime = "";
-                toast("Appointment added: " + appt.toString());
-            }
         }
     }
 

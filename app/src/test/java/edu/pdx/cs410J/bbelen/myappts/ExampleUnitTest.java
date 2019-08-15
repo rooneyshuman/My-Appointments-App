@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import org.junit.Test;
 

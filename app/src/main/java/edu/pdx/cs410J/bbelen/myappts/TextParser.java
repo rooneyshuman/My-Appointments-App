@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +32,7 @@ public class ChangeOwnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_owner);
-        prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        prefs = getSharedPreferences("edu.pdx.cs410J.bbelen.myappts", MODE_PRIVATE);
     }
 
     /**

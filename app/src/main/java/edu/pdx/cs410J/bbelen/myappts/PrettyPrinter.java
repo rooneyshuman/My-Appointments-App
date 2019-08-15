@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import java.util.ArrayList;
 import java.util.Collection;

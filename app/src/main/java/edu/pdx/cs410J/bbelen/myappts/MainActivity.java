@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        prefs = getSharedPreferences("edu.pdx.cs410J.bbelen.myappts", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
     }
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Get owner name
-        SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("edu.pdx.cs410J.bbelen.myappts", MODE_PRIVATE);
         owner = prefs.getString("ownerPref", null);
 
         TextView ownerTextMain = findViewById(R.id.ownerTextMain);

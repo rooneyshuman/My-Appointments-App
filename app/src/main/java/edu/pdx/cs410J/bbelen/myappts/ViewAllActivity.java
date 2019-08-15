@@ -1,4 +1,4 @@
-package com.cs410j.myappts;
+package edu.pdx.cs410J.bbelen.myappts;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +39,7 @@ public class ViewAllActivity extends AppCompatActivity {
      * is displayed
      */
     private void display() {
-        SharedPreferences prefs = getSharedPreferences("com.cs410j.myappts", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("edu.pdx.cs410J.bbelen.myappts", MODE_PRIVATE);
         String owner = prefs.getString("ownerPref", null);
         String filename = owner + ".txt";
         File file = new File(getApplicationContext().getFilesDir(), filename);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cs410j.myappts">
+    package="edu.pdx.cs410J.bbelen.myappts">
 
     <application
         android:allowBackup="true"
